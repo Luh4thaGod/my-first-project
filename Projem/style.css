@@ -1,0 +1,104 @@
+:root {
+  --primary: #ff6a00;
+  --bg: #050505;
+  --card: #121212;
+  --accent: #ffcc00;
+  --t: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+* { margin:0; padding:0; box-sizing:border-box; font-family: 'Inter', sans-serif; }
+body { background: var(--bg); color: #eee; overflow-x: hidden; }
+
+.lines {
+  position: fixed;
+  width: 90vw;
+  height: 100%;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 0;
+  pointer-events: none;
+}
+.line {
+  position: absolute;
+  width: 1px;
+  height: 100%;
+  top: 0;
+  left: 50%;
+  background: rgba(255, 255, 255, 0.08);
+  overflow: hidden;
+}
+.line::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 15vh;
+  top: -50%;
+  background: linear-gradient(to bottom, rgba(255, 255, 255, 0) 0%, var(--primary) 75%, var(--accent) 100%);
+  animation: drop 5s infinite cubic-bezier(0.4, 0.26, 0, 0.97);
+  will-change: top;
+}
+.line:nth-child(1) { margin-left: -25%; }
+.line:nth-child(2) { margin-left: 0; }
+.line:nth-child(3) { margin-left: 25%; }
+.line:nth-child(1)::after { animation-delay: 2s; }
+.line:nth-child(3)::after { animation-delay: 1s; }
+
+@keyframes drop {
+  0% { top: -20%; }
+  100% { top: 120%; }
+}
+
+/* ===== İÇERİK YAPISI ===== */
+header { position: relative; z-index: 2; text-align: center; padding: 60px 20px; font-size: 3rem; font-weight: 900; color: #fff; letter-spacing: -2px; }
+
+.categories {
+  position: sticky; top: 0; z-index: 100;
+  display: flex; justify-content: center; flex-wrap: wrap;
+  padding: 15px; background: rgba(5, 5, 5, 0.85);
+  backdrop-filter: blur(12px); border-bottom: 1px solid #222;
+}
+.categories button {
+  padding: 10px 20px; margin: 5px; border: 1px solid #333;
+  border-radius: 12px; background: transparent; color: #888;
+  cursor: pointer; transition: var(--t); font-weight: 600;
+}
+.categories button.active { background: var(--primary); color: #fff; border-color: var(--primary); }
+
+.menu {
+  display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px; padding: 40px 5%; max-width: 1400px; margin: 0 auto; position: relative; z-index: 2;
+}
+
+.card {
+  background: var(--card); padding: 25px; border-radius: 20px;
+  border: 1px solid #222; transition: var(--t);
+  display: flex; flex-direction: column;
+}
+.card.hide { opacity: 0; transform: scale(0.9); display: none; }
+.card:hover { border-color: var(--primary); transform: translateY(-5px); background: #181818; }
+.card h3 { font-size: 1.2rem; margin-bottom: 8px; }
+.card .desc { font-size: 0.85rem; color: #666; margin-bottom: 15px; flex-grow: 1; }
+.card .price { font-size: 1.3rem; font-weight: 800; color: var(--accent); }
+
+.add-btn {
+  margin-top: 15px; padding: 12px; border: none; border-radius: 10px;
+  background: #222; color: #fff; font-weight: bold; cursor: pointer; transition: 0.2s;
+}
+.add-btn:hover { background: var(--primary); transform: scale(1.05); }
+
+/* SEPET & ÖDEME */
+.float-cart {
+  position: fixed; bottom: 30px; right: 30px; background: var(--primary);
+  width: 65px; height: 65px; border-radius: 50%; display: flex;
+  align-items: center; justify-content: center; font-size: 1.5rem;
+  cursor: pointer; box-shadow: 0 10px 30px rgba(255,106,0,0.3); z-index: 200;
+}
+.cart-badge { position: absolute; top: 0; right: 0; background: #fff; color: #000; width: 22px; height: 22px; border-radius: 50%; font-size: 0.75rem; display: flex; align-items: center; justify-content: center; font-weight: 900; }
+
+.checkout-overlay {
+  position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+  background: rgba(0,0,0,0.96); backdrop-filter: blur(10px);
+  z-index: 1000; display: none; align-items: center; justify-content: center;
+}
+.checkout-card { background: #111; width: 95%; max-width: 500px; border-radius: 25px; padding: 30px; border: 1px solid #333; position: relative; }
+.form-input { width: 100%; padding: 12px; margin: 8px 0; border-radius: 10px; border: 1px solid #333; background: #1a1a1a; color: #fff; outline: none; }

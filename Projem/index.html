@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Lezzet Durağı | Full Premium</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="lines">
+  <div class="line"></div>
+  <div class="line"></div>
+  <div class="line"></div>
+</div>
+
+<header>LEZZET DURAĞI</header>
+
+<div class="categories">
+  <button class="active" onclick="filter('all', this)">Hepsi</button>
+  <button onclick="filter('burger', this)">Burgerler</button>
+  <button onclick="filter('pizza', this)">Pizzalar</button>
+  <button onclick="filter('makarna', this)">Makarnalar</button>
+  <button onclick="filter('tatli', this)">Tatlılar</button>
+  <button onclick="filter('icecek', this)">İçecekler</button>
+</div>
+
+<div class="menu" id="menu-grid"></div>
+
+<div class="float-cart" onclick="showCheckout()">
+  🛒 <div class="cart-badge" id="badge">0</div>
+</div>
+
+<div class="checkout-overlay" id="checkout-overlay">
+  <div class="checkout-card">
+    <button onclick="showCheckout()" style="position:absolute; top:15px; right:15px; background:none; border:none; color:#666; cursor:pointer; font-size:1.2rem;">✕</button>
+    <h2 style="text-align:center; margin-bottom:15px;">Sepet & Ödeme</h2>
+    <ul id="checkout-list" style="list-style:none; max-height:150px; overflow-y:auto; margin-bottom:15px;"></ul>
+    <div style="text-align:right; font-weight:bold; color:var(--accent); font-size:1.2rem; margin-bottom:20px;">Toplam: ₺<span id="total-val">0</span></div>
+    
+    <input type="text" class="form-input" placeholder="Kart Üzerindeki İsim">
+    <input type="text" class="form-input" placeholder="Kart Numarası">
+    <div style="display:flex; gap:10px;">
+      <input type="text" class="form-input" placeholder="MM/YY">
+      <input type="password" class="form-input" placeholder="CVC">
+    </div>
+    <button onclick="alert('Sipariş Alındı!')" style="width:100%; padding:15px; background:var(--primary); color:#fff; border:none; border-radius:10px; font-weight:bold; margin-top:15px; cursor:pointer;">Ödemeyi Tamamla</button>
+  </div>
+</div>
+
+<script>
+const products = [
+  { n: "Klasik Burger", p: 195, c: "burger", d: "150g köfte, cheddar, özel sos" },
+  { n: "Acılı Meksika", p: 210, c: "burger", d: "Jalapeno, acı sos, mısır" },
+  { n: "Mantar Burger", p: 205, c: "burger", d: "Kremalı mantar sosu" },
+  { n: "Double Beef", p: 280, c: "burger", d: "300g et, bol peynir" },
+  { n: "Margarita Pizza", p: 180, c: "pizza", d: "Taze fesleğen, mozarella" },
+  { n: "Pesto Tavuklu", p: 255, c: "pizza", d: "Pesto sos, tavuk parçaları" },
+  { n: "Dört Peynirli", p: 235, c: "pizza", d: "Gurme peynir harmanı" },
+  { n: "Tavuklu Alfredo", p: 190, c: "makarna", d: "Fettuccine, tavuk, krema" },
+  { n: "San Sebastian", p: 145, c: "tatli", d: "Belçika çikolatalı" },
+  { n: "Lotus Magnolia", p: 120, c: "tatli", d: "Bisküvili taze krema" },
+  { n: "Cool Lime", p: 70, c: "icecek", d: "Misket limonlu ferahlık" },
+  { n: "Ev Yapımı Ayran", p: 35, c: "icecek", d: "Bol köpüklü" }
+  // İstersen buraya dilediğin kadar ürün ekleyebilirsin...
+];
+
+let cart = [];
+let total = 0;
+
+function renderMenu() {
+  document.getElementById('menu-grid').innerHTML = products.map(item => `
+    <div class="card ${item.c}">
+      <h3>${item.n}</h3>
+      <p class="desc">${item.d}</p>
+      <div style="display:flex; justify-content:space-between; align-items:center;">
+        <span class="price">₺${item.p}</span>
+        <button class="add-btn" onclick="add('${item.n}', ${item.p})">Ekle</button>
+      </div>
+    </div>
+  `).join('');
+}
+
+function add(n, p) {
+  cart.push({n, p});
+  total += p;
+  document.getElementById('badge').innerText = cart.length;
+  document.getElementById('total-val').innerText = total;
+}
+
+function filter(cat, btn) {
+  document.querySelectorAll('.categories button').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  document.querySelectorAll('.card').forEach(card => {
+    card.classList.toggle('hide', !(cat === 'all' || card.classList.contains(cat)));
+  });
+}
+
+function showCheckout() {
+  const overlay = document.getElementById('checkout-overlay');
+  const list = document.getElementById('checkout-list');
+  list.innerHTML = cart.map(i => `<li style="display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid #222;"><span>${i.n}</span><span>₺${i.p}</span></li>`).join('');
+  overlay.style.display = (overlay.style.display === 'flex') ? 'none' : 'flex';
+}
+
+renderMenu();
+</script>
+
+</body>
+</html>
